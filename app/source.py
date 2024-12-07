@@ -186,7 +186,7 @@ async def markdownify(
 
     """
     # Workaround for https://github.com/miyuchina/mistletoe/issues/233
-    escaped_content = content.replace("\r","")
+    escaped_content = content.replace("\r", "")
 
     tags = []
     mentioned_actors: dict[str, "Actor"] = {}
