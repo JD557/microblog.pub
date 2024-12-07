@@ -185,21 +185,24 @@ async def markdownify(
     >>> content, tags = markdownify("Hello")
 
     """
+    # Workaround for https://github.com/miyuchina/mistletoe/issues/233
+    escaped_content = content.replace("\r","")
+
     tags = []
     mentioned_actors: dict[str, "Actor"] = {}
     if enable_mentionify:
-        mentioned_actors = await _prefetch_mentioned_actors(db_session, content)
+        mentioned_actors = await _prefetch_mentioned_actors(db_session, escaped_content)
 
     with CustomRenderer(
         mentioned_actors=mentioned_actors,
         enable_mentionify=enable_mentionify,
         enable_hashtagify=enable_hashtagify,
     ) as renderer:
-        rendered_content = renderer.render(Document(content))
+        rendered_content = renderer.render(Document(escaped_content))
         tags.extend(renderer.tags)
 
     # Handle custom emoji
-    tags.extend(emoji.tags(content))
+    tags.extend(emoji.tags(escaped_content))
 
     return rendered_content, dedup_tags(tags), list(mentioned_actors.values())
 
