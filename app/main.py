@@ -284,6 +284,7 @@ async def redirect_to_remote_instance(
 
 
 @app.get(config.NavBarItems.NOTES_PATH, response_model=None)
+@app.get("/@" + USERNAME, response_model=None)
 async def index(
     request: Request,
     db_session: AsyncSession = Depends(get_db_session),
