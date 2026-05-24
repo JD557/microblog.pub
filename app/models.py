@@ -131,7 +131,7 @@ class InboxObject(Base, BaseObject):
     is_deleted = Column(Boolean, nullable=False, default=False)
     is_transient = Column(Boolean, nullable=False, default=False, server_default="0")
 
-    in_reply_to: Mapped[str] = Column(String, nullable=True, index=True)
+    in_reply_to: Mapped[str | None] = Column(String, nullable=True, index=True)
     replies_count: Mapped[int] = Column(Integer, nullable=False, default=0)
 
     og_meta: Mapped[list[dict[str, Any]] | None] = Column(JSON, nullable=True)
@@ -180,7 +180,7 @@ class OutboxObject(Base, BaseObject):
     ap_published_at = Column(DateTime(timezone=True), nullable=False, default=now)
     visibility = Column(Enum(ap.VisibilityEnum), nullable=False)
     conversation = Column(String, nullable=True)
-    in_reply_to: Mapped[str] = Column(String, nullable=True, index=True)
+    in_reply_to: Mapped[str | None] = Column(String, nullable=True, index=True)
 
     likes_count = Column(Integer, nullable=False, default=0)
     announces_count = Column(Integer, nullable=False, default=0)
