@@ -18,11 +18,11 @@ depends_on = None
 
 def upgrade() -> None:
     with op.batch_alter_table('inbox', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('in_reply_to', sa.Integer()))
+        batch_op.add_column(sa.Column('in_reply_to', sa.String(), nullable=True))
         batch_op.create_index(batch_op.f('ix_inbox_in_reply_to'), ['in_reply_to'], unique=False)
 
     with op.batch_alter_table('outbox', schema=None) as batch_op:
-        batch_op.add_column(sa.Column('in_reply_to', sa.Integer()))
+        batch_op.add_column(sa.Column('in_reply_to', sa.String(), nullable=True))
         batch_op.create_index(batch_op.f('ix_outbox_in_reply_to'), ['in_reply_to'], unique=False)
 
     op.execute("UPDATE inbox SET in_reply_to = json_extract(ap_object, '$.inReplyTo')")
